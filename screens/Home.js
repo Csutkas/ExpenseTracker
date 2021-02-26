@@ -215,7 +215,7 @@ const Home = () => {
         }
     ]
 
-    const categoryListHeightAnimationValue = useRef(new Animated.Value(115)).current;
+    const categoryListHeightAnimationValue = useRef(new Animated.Value(130)).current;
 
     const [categories, setCategories] = React.useState(categoriesData);
     const [viewMode, setViewMode] = React.useState("chart");
@@ -410,6 +410,20 @@ const Home = () => {
                         justifyContent: 'center'
                     }}
                     onPress={() => {
+                        if (showMoreToggle) {
+                            Animated.timing(categoryListHeightAnimationValue, {
+                                toValue: 130,
+                                duration: 300,
+                                useNativeDriver: false
+                            }).start()
+                        } else {
+                            Animated.timing(categoryListHeightAnimationValue, {
+                                toValue: 192,
+                                duration: 300,
+                                useNativeDriver: false
+                            }).start()
+                        }
+
                         setShowMoreToggle(!showMoreToggle) 
                     }}
                 >
@@ -425,6 +439,21 @@ const Home = () => {
                     />
                 </TouchableOpacity>
             </View>
+        )
+    }
+
+    function renderIncomingExpensesTitle() {
+        return (
+            <View style={{ padding: SIZES.padding, backgroundColor: COLORS.lightGray2 }}>
+                <Text style={{ ...FONTS.h3, color: COLORS.primary }}>INCOMING EXPENSES</Text>
+                <Text style={{ ...FONTS.body4, color: COLORS.darkgray }}>12 Total</Text>
+            </View>
+        )
+    }
+
+    function renderIncomingExpenses() {
+        return (
+            <View>{renderIncomingExpensesTitle()}</View>
         )
     }
 
@@ -444,6 +473,7 @@ const Home = () => {
                     viewMode == "list" &&
                     <View>
                         {renderCategoryList()}
+                        {renderIncomingExpenses()}
                     </View>
                 }
             </ScrollView>
