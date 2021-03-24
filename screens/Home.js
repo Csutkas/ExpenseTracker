@@ -10,6 +10,8 @@ import {
     Animated
 } from 'react-native';
 
+import { VictoryPie } from 'victory-native';
+
 import { COLORS, FONTS, SIZES, icons } from '../constants';
 
 const Home = () => {
@@ -29,7 +31,7 @@ const Home = () => {
                     id: 1,
                     title: "Tuition Fee",
                     description: "Tuition fee",
-                    location: "ByProgrammers' tuition center",
+                    location: "Budapest' tuition center",
                     total: 100.00,
                     status: pendingStatus
                 },
@@ -37,7 +39,7 @@ const Home = () => {
                     id: 2,
                     title: "Arduino",
                     description: "Hardward",
-                    location: "ByProgrammers' tuition center",
+                    location: "Budapest' tuition center",
                     total: 30.00,
                     status: pendingStatus
                 },
@@ -45,7 +47,7 @@ const Home = () => {
                     id: 3,
                     title: "Javascript Books",
                     description: "Javascript books",
-                    location: "ByProgrammers' Book Store",
+                    location: "Budapest' Book Store",
                     total: 20.00,
                     status: confirmStatus
                 },
@@ -53,7 +55,7 @@ const Home = () => {
                     id: 4,
                     title: "PHP Books",
                     description: "PHP books",
-                    location: "ByProgrammers' Book Store",
+                    location: "Budapest' Book Store",
                     total: 20.00,
                     status: confirmStatus
                 }
@@ -69,7 +71,7 @@ const Home = () => {
                     id: 5,
                     title: "Vitamins",
                     description: "Vitamin",
-                    location: "ByProgrammers' Pharmacy",
+                    location: "Budapest' Pharmacy",
                     total: 25.00,
                     status: pendingStatus,
                 },
@@ -78,7 +80,7 @@ const Home = () => {
                     id: 6,
                     title: "Protein powder",
                     description: "Protein",
-                    location: "ByProgrammers' Pharmacy",
+                    location: "Budapest' Pharmacy",
                     total: 50.00,
                     status: confirmStatus,
                 },
@@ -95,7 +97,7 @@ const Home = () => {
                     id: 7,
                     title: "Toys",
                     description: "toys",
-                    location: "ByProgrammers' Toy Store",
+                    location: "Budapest' Toy Store",
                     total: 25.00,
                     status: confirmStatus,
                 },
@@ -103,7 +105,7 @@ const Home = () => {
                     id: 8,
                     title: "Baby Car Seat",
                     description: "Baby Car Seat",
-                    location: "ByProgrammers' Baby Care Store",
+                    location: "Budapest' Baby Care Store",
                     total: 100.00,
                     status: pendingStatus,
                 },
@@ -111,7 +113,7 @@ const Home = () => {
                     id: 9,
                     title: "Pampers",
                     description: "Pampers",
-                    location: "ByProgrammers' Supermarket",
+                    location: "Budapest' Supermarket",
                     total: 100.00,
                     status: pendingStatus,
                 },
@@ -119,7 +121,7 @@ const Home = () => {
                     id: 10,
                     title: "Baby T-Shirt",
                     description: "T-Shirt",
-                    location: "ByProgrammers' Fashion Store",
+                    location: "Budapest' Fashion Store",
                     total: 20.00,
                     status: pendingStatus,
                 },
@@ -135,7 +137,7 @@ const Home = () => {
                     id: 11,
                     title: "Skin Care product",
                     description: "skin care",
-                    location: "ByProgrammers' Pharmacy",
+                    location: "Budapest' Pharmacy",
                     total: 10.00,
                     status: pendingStatus,
                 },
@@ -143,7 +145,7 @@ const Home = () => {
                     id: 12,
                     title: "Lotion",
                     description: "Lotion",
-                    location: "ByProgrammers' Pharmacy",
+                    location: "Budapest' Pharmacy",
                     total: 50.00,
                     status: confirmStatus,
                 },
@@ -151,7 +153,7 @@ const Home = () => {
                     id: 13,
                     title: "Face Mask",
                     description: "Face Mask",
-                    location: "ByProgrammers' Pharmacy",
+                    location: "Budapest' Pharmacy",
                     total: 50.00,
                     status: pendingStatus,
                 },
@@ -159,7 +161,7 @@ const Home = () => {
                     id: 14,
                     title: "Sunscreen cream",
                     description: "Sunscreen cream",
-                    location: "ByProgrammers' Pharmacy",
+                    location: "Budapest' Pharmacy",
                     total: 50.00,
                     status: pendingStatus,
                 },
@@ -175,7 +177,7 @@ const Home = () => {
                     id: 15,
                     title: "Gym Membership",
                     description: "Monthly Fee",
-                    location: "ByProgrammers' Gym",
+                    location: "Budapest' Gym",
                     total: 45.00,
                     status: pendingStatus,
                 },
@@ -183,7 +185,7 @@ const Home = () => {
                     id: 16,
                     title: "Gloves",
                     description: "Gym Equipment",
-                    location: "ByProgrammers' Gym",
+                    location: "Budapest' Gym",
                     total: 15.00,
                     status: confirmStatus,
                 },
@@ -199,7 +201,7 @@ const Home = () => {
                     id: 17,
                     title: "T-Shirt",
                     description: "Plain Color T-Shirt",
-                    location: "ByProgrammers' Mall",
+                    location: "Budapest' Mall",
                     total: 20.00,
                     status: pendingStatus,
                 },
@@ -207,7 +209,7 @@ const Home = () => {
                     id: 18,
                     title: "Jeans",
                     description: "Blue Jeans",
-                    location: "ByProgrammers' Mall",
+                    location: "Budapest' Mall",
                     total: 50.00,
                     status: confirmStatus,
                 },
@@ -452,8 +454,249 @@ const Home = () => {
     }
 
     function renderIncomingExpenses() {
+        let allExpenses = selectedCategory ? selectedCategory.expenses : []
+
+        // Filter pending expenses
+        let incomingExpenses = allExpenses.filter(a => a.status == "P")
+
+        const renderItem = ({ item, index }) => (
+            <View style={{
+                width: 300,
+                marginRight: SIZES.padding,
+                marginLeft: index == 0 ? SIZES.padding : 0,
+                marginVertical: SIZES.radius,
+                borderRadius: SIZES.radius,
+                backgroundColor: COLORS.white,
+                ...style.shadow
+            }}>
+                {/* Title */}
+                <View style={{ flexDirection: 'row', padding: SIZES.padding, alignItems: 'center' }}>
+                    <View 
+                        style={{
+                            height: 50,
+                            width: 50,
+                            borderRadius: 25,
+                            backgroundColor: COLORS.lightGray,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginRight: SIZES.base
+                        }}
+                    >
+                        <Image
+                            source={selectedCategory.icon}
+                            style={{
+                                width: 30,
+                                height: 30,
+                                tintColor: selectedCategory.color
+                            }}
+                        />
+                    </View>
+
+                    <Text style={{ ...FONTS.h3, color: selectedCategory.color }}>{selectedCategory.name}</Text>
+                </View>
+
+                {/* Expense Description */}
+                <View style={{ paddingHorizontal: SIZES.padding }}>
+                    {/* Title and description */}
+                    <Text style={{ ...FONTS.h2 }}>{item.title}</Text>
+                    <Text style={{ ...FONTS.body3, flexWrap: 'wrap', color: COLORS.darkgray }}>{item.description}</Text>
+
+                    {/* Location */}
+                    <Text style={{ marginTop: SIZES.padding, ...FONTS.h4 }} >Location</Text>
+                    <View style={{flexDirection: 'row'}}>
+                        <Image
+                            source={icons.pin}
+                            style={{
+                                width: 20,
+                                height: 20,
+                                tintColor: COLORS.darkgray,
+                                marginRight: 5
+                            }}
+                        />
+                        <Text style={{ marginBottom: SIZES.base, color: COLORS.darkgray, ...FONTS.body4 }}>{item.location}</Text>
+                    </View>
+                </View>
+
+                {/* Price */}
+                <View
+                    style={{
+                        height: 50,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderBottomStartRadius: SIZES.radius,
+                        borderBottomEndRadius: SIZES.radius,
+                        backgroundColor: selectedCategory.color
+                    }}
+                >
+                    <Text>CONFIRM {item.total.toFixed(2)} EUR</Text>
+                </View>
+            </View>
+        )
+
         return (
-            <View>{renderIncomingExpensesTitle()}</View>
+            <View>
+                {renderIncomingExpensesTitle()}
+
+                {
+                    incomingExpenses.length > 0 &&
+                    <FlatList
+                        data={incomingExpenses}
+                        renderItem={renderItem}
+                        keyExtractor={item => `${item.id}`}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                    />    
+                }
+
+                {
+                    incomingExpenses.length == 0 &&
+                    <View style={{ alignItems: 'center', justifyContent: 'center', height: 300}}>
+                        <Text style={{ color: COLORS.primary, ...FONTS.h3 }}>No Record</Text>
+                    </View>
+                    
+                }
+
+            </View>
+        )
+    }
+
+    function processCategoryDataToDisplay() {
+        // Filter expenses with "Confirmed" status
+        let chartData = categories.map((item) => {
+            let confirmExpenses = item.expenses.filter(a => a.status == "C")
+            var total = confirmExpenses.reduce((a,b) => a + (b.total || 0), 0)
+
+            return {
+                name: item.name,
+                y: total,
+                expenseCount: confirmExpenses.length,
+                color: item.color,
+                id: item.id
+            }
+        })
+
+        // Filter out categories with no data/expenses
+        let filterChartData = chartData.filter(a => a.y > 0)
+
+        // Calculate the total expenses
+        let totalExpense = filterChartData.reduce((a,b) => a + (b.y || 0), 0)
+
+        // Calculate percentage and repopulate chart data
+        let finalChartData = filterChartData.map((item) => {
+            let percentage = (item.y / totalExpense * 100).toFixed(0)
+            return {
+                label: `${percentage}%`,
+                y: Number(item.y),
+                expenseCount: item.expenseCount,
+                color: item.color,
+                name: item.name,
+                id: item.id
+            }
+        })
+
+        return finalChartData;
+    }
+
+    function setSelectedCategoryByName(name) {
+        let category = categories.filter(a => a.name == name)
+        setSelectedCategory(category[0])
+    }
+
+    function renderChart() {
+        let chartData = processCategoryDataToDisplay()
+        let colorScales = chartData.map((item) => item.color)
+        let totalExpenseCount = chartData.reduce((a,b) => a + (b.expenseCount || 0), 0)
+
+        return (
+            <View style={{ alignItems: 'center', justifyContent: 'center'}}>
+                <VictoryPie 
+                    data={chartData}
+                    colorScale={colorScales}
+                    labels={(datum) => `${datum.y}`}
+                    radius={({ datum }) => (selectedCategory && selectedCategory.name == datum.name) ? SIZES.width * 0.4 : SIZES.width * 0.4 - 10}
+                    innerRadius={70}
+                    labelRadius={({ innerRadius }) => (SIZES.width * 0.4 + innerRadius) / 2.5}
+                    style={{
+                        labels: { fill: COLORS.white, ...FONTS.body3 },
+                        parent: {
+                            ...StyleSheet.shadow
+                        }
+                    }}
+                    width={SIZES.width * 0.8}
+                    height={SIZES.width * 0.8}                    
+                    // event for select one pie in chart
+                    events={[{
+                        target: "data",
+                        eventHandlers: {
+                            onPress: () => {
+                                return [{
+                                    target: "labels",
+                                    mutation: (props) => {
+                                        let categoryName = chartData[props.index].name
+                                        setSelectedCategoryByName(categoryName)
+                                    }
+                                }]
+                            }
+                        }
+                    }]}
+                />
+
+                <View style={{ position: 'absolute', top: '42%', left: '42%' }}>
+                    <Text style={{ ...FONTS.h1, textAlign: 'center' }}>{totalExpenseCount}</Text>
+                    <Text style={{ textAlign: 'center', ...FONTS.body3 }}>Expenses</Text>
+                </View>
+            </View>
+        )
+    }
+
+    function renderExpenseSummary() {
+
+        let data = processCategoryDataToDisplay()
+
+        const renderItem = ({ item }) => {
+            return (
+                <TouchableOpacity
+                    style={{
+                        flexDirection: 'row',
+                        height: 40,
+                        paddingHorizontal: SIZES.radius,
+                        borderRadius: 10,
+                        backgroundColor: (selectedCategory && selectedCategory.name == item.name) ? item.color : COLORS.white
+                    }}
+                    onPress={() => {
+                        let categoryName = item.name
+                        setSelectedCategoryByName(categoryName)
+                    }}
+                >
+                    {/* Name/Category */}
+                    <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+                        <View
+                            style={{
+                                width: 20,
+                                height: 20,
+                                backgroundColor: (selectedCategory && selectedCategory.name == item.name) ? COLORS.white : item.color,
+                                borderRadius: 5,
+                            }}
+                        ></View>
+                        <Text style={{ marginLeft: SIZES.base, ...FONTS.h3, color: (selectedCategory && selectedCategory.name == item.name) ? COLORS.white : COLORS.primary }}>{item.name}</Text>
+                    </View>
+
+                    {/* Expenses */}
+                    <View style={{ justifyContent: 'center' }}>
+                        <Text style={{ color: COLORS.white, ...FONTS.h3, color: (selectedCategory && selectedCategory.name == item.name) ? COLORS.white : COLORS.primary   }}>{item.y} EUR - {item.label}</Text>
+                    </View>
+                </TouchableOpacity>
+            )
+        }
+
+        return (
+            <View style={{ padding: SIZES.padding }}>
+                <FlatList
+                data={data}
+                renderItem={renderItem}
+                keyExtractor={item => `${item.id}`}
+                />
+            </View>
         )
     }
 
@@ -474,6 +717,13 @@ const Home = () => {
                     <View>
                         {renderCategoryList()}
                         {renderIncomingExpenses()}
+                    </View>
+                }
+                {
+                    viewMode == "chart" &&
+                    <View>
+                        {renderChart()}
+                        {renderExpenseSummary()}                 
                     </View>
                 }
             </ScrollView>
